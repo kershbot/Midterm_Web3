@@ -1,0 +1,109 @@
+<?php
+// Creating an inputing data into a created database//
+$m = new MongoClient (); // connect to mongo 
+$db = $m -> twitter; // use a particular database (db)
+$collection = $db -> twitterresults; // select our collection 
+
+
+//Getting Twitter Oauth folder//
+include("twitteroauth/twitteroauth.php");
+
+//inputing (making a varible) for twitter oauth app info//
+$access_token = '42116441-cVvfCOm4Oyawp0ce7s6gerWodqRkDW7cd4ySGbyYC';
+$access_secret = '3a6kddwDAKx7wY5yVSAwHSvMOREFgYgw5MNqON05yU';
+$consumer_key = 'ey3pd9SUob05S1COkH4Jg'; 
+$consumer_secret = 'ang5HT8MdbKRPHKiXVzbDg0lLneu8M3oRJ8oZ7ebMQo';
+//new folder for library 
+
+$twitter = new TwitterOAuth($consumer_key, $consumer_secret, $access_token, $access_secret);
+
+$options = array('q'=> 'stress depression love');
+
+// content varible get twitter varible search tweets with the varible options of stress (q is determined by twitter) 
+$content = $twitter->get('search/tweets', $options); 
+
+//print_r($content);
+
+//decoded in JSON below 
+
+$content = json_decode($content, TRUE);
+
+
+
+//loop array and create seperate documents for each tweet 
+foreach ($content as $id => $item){
+$collection ->insert ($item); 
+
+
+//for the content show status This is now completed in the below html//
+/*
+foreach($content['statuses'] as $c){
+  print_r($c);
+}
+*/
+
+
+?>
+
+<!doctype>
+<html>
+	<head>
+		<!meta charset="UTF-8">
+		
+		<!Title>
+		<title>Midterm</title>
+		<link href='http://fonts.googleapis.com/css?family=Simonetta' rel='stylesheet' type='text/css'>	
+		<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans' rel='stylesheet' type='text/css'>	
+		
+		<!--Styling my sections-->
+		<style> 
+		body{
+			font-family: 'Simonetta', bold;
+			font-size: 16px;
+			margin: 0px;
+			zoom: reset;
+		}
+		h1, p{
+			margin:0px;
+		}
+	
+		section# 1{
+			text-align:right;
+			width: 500px;
+			float: right;
+			padding: 20px;
+			margin-top: -20px;
+			}
+
+		</style>
+	</head>
+	<body>
+		</head>
+	<body>
+	
+	<!-- abc = 1 2 3 looping through array // -->
+	<!--
+	<?php foreach($content['statuses'] as $c){ 
+			$h1IDs = str_replace(' ', '-', $c);?>
+			<section id="<?php echo $h1IDs;?>">
+-->
+				<ul>
+					<?php foreach($content['statuses'] as $c){ ?>
+						<li>
+							<header>
+								<img class="profile_pic" src="<?=$c['user']['profile_image_url']?>" alt="Profile picture of <?=$c['user']['name']?>" />
+								<span class="name"><?=$c['user']['name']?></span>
+								<span class="screen-name"><?=$c['user']['screen_name']?></span>
+								<span class="location"><?=$c['user']['location']?></span>
+								
+							</header>
+							<div class="body">
+								<p class="text"><?=$c['text']?></p>
+							</div>
+						</li>
+					<?php } ?>
+				</ul>
+			</section>
+<?php	} ?>	
+	</body>
+</html>
