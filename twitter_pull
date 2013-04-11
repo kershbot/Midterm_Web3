@@ -10,10 +10,7 @@ $document =
 include("twitteroauth/twitteroauth.php");
 
 //inputing (making a varible) for twitter oauth app info//
-$access_token = '42116441-cVvfCOm4Oyawp0ce7s6gerWodqRkDW7cd4ySGbyYC';
-$access_secret = '3a6kddwDAKx7wY5yVSAwHSvMOREFgYgw5MNqON05yU';
-$consumer_key = 'ey3pd9SUob05S1COkH4Jg'; 
-$consumer_secret = 'ang5HT8MdbKRPHKiXVzbDg0lLneu8M3oRJ8oZ7ebMQo';
+add key input 
 //new folder for library 
 
 $twitter = new TwitterOAuth($consumer_key, $consumer_secret, $access_token, $access_secret);
